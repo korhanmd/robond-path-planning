@@ -17,15 +17,20 @@ void print2DVector(vector<vector<int> > vec)
     }
 }
 
-// ***TODO: Check for duplicate coordinates inside a 2D vector and delete them*** //
+// Check for duplicate coordinates inside a 2D vector and delete them
 vector<vector<int> > delete_duplicate(vector<vector<int> > C)
 {
+    sort(C.begin(), C.end());
 
+    vector<vector<int>> C_new;
     
+    for (int i = 0; i < C.size() - 1; i++){
+        if (C[i] != C[i + 1])
+            C_new.push_back(C[i]);
+    }
     
-    
-    
-    
+    C_new.push_back(C[C.size() - 1]);
+    return C_new;
 }
 
 // Compute the Minkowski Sum of two vectors
