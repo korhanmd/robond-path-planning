@@ -5,9 +5,20 @@
 
 using namespace std;
 
-/* TODO: Define a Map class
-   Inside the map class, define the mapWidth, mapHeight and grid as a 2D vector
-*/
+// Map class
+
+class Map{
+public:
+  const static int mapWidth = 6;
+  const static int mapHeight = 5;
+  vector<vector<int>> grid = {
+    {0, 1, 0, 0, 0, 0},
+    {0, 1, 0, 0, 0, 0},
+    {0, 1, 0, 0, 0, 0},
+    {0, 1, 0, 0, 0, 0},
+    {0, 0, 0, 1, 1, 0}
+  };
+};
 
 /* TODO: Define a Planner class
    Inside the Planner class, define the start, goal, cost, movements, and movements_arrows
