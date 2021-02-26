@@ -38,22 +38,17 @@ public:
   string movements_arrows[4] = {"^", "<", "v", ">"};
 };
 
-/* TODO: Define a print2DVector function which will print 2D vectors of any data type
-   Example
-   
-   Input: 
-   vector<vector<int> > a{{ 1, 0 },{ 0, 1 }};
-   print2DVector(a);
-   vector<vector<string> > b{{ "a", "b" },{ "c", "d" }};
-   print2DVector(b);
-   
-   Output:
-   1 0
-   0 1
-   a b
-   c d
-   Hint: You need to use templates
-*/
+// print2DVector function prints 2D vectors of any data type
+
+template <typename T>
+void print2DVector(T Vec){
+  for (int i = 0; i < Vec.size(); i++){
+    for (int j = 0; j < Vec[0].size(); j++){
+      cout << Vec[i][j] << ' ';
+    }
+    cout << endl;
+  }
+}
 
 /*############ Don't modify the main function############*/
 int main()
