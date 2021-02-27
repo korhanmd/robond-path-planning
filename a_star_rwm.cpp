@@ -2,29 +2,68 @@
 #include <string.h>
 #include <vector>
 #include <algorithm>
+#include <math.h>
+#include <fstream>
 
 using namespace std;
 
 // Map class
 class Map{
 public:
-  const static int mapWidth = 6;
-  const static int mapHeight = 5;
-  vector<vector<int>> grid = {
-    {0, 1, 0, 0, 0, 0},
-    {0, 1, 0, 0, 0, 0},
-    {0, 1, 0, 0, 0, 0},
-    {0, 1, 0, 0, 0, 0},
-    {0, 0, 0, 1, 1, 0}
-  };
+  const static int mapWidth = 150;
+  const static int mapHeight = 300;
 
-  vector<vector<int>> heuristic = {
-    {9, 8, 7, 6, 5, 4},
-    {8, 7, 6, 5, 4, 3},
-    {7, 6, 5, 4, 3, 2},
-    {6, 5, 4, 3, 2, 1},
-    {5, 4, 3, 2, 1, 0}
-  };
+  vector<vector<double>> map = GetMap();
+  vector<vector<int>> grid = MaptoGrid();
+  vector<vector<int>> heuristic = GenerateHeuristic();
+
+private:
+  // Read the file and get the map
+  vector<vector<double> > GetMap(){
+    vector<vector<double> > mymap(mapHeight, vector<double>(mapWidth));
+    ifstream myReadFile;
+    myReadFile.open("map.txt");
+
+    while (!myReadFile.eof()) {
+      for (int i = 0; i < mapHeight; i++) {
+        for (int j = 0; j < mapWidth; j++) {
+          myReadFile >> mymap[i][j];
+        }
+      }
+    }
+    return mymap;
+  }
+
+  // Convert the map to 1's and 0's
+  vector<vector<int> > MaptoGrid(){
+    vector<vector<int>> grid(mapHeight, vector<int>(mapWidth));
+    
+    for (int i = 0; i < mapHeight; i++){
+    	for (int j = 0; j < mapWidth; j++){
+    		if (map[i][j] < 0)
+    			grid[i][j] = 0;
+    		else
+    			grid[i][j] = 1;
+    	}
+    }
+    return grid;
+  }
+
+  vector<vector<int>> GenerateHeuristic(){
+  	vector<vector<int>> heuristic(mapHeight, vector<int>(mapWidth));
+  	int goal[2] = {60, 50};
+
+  	for (int i = 0; i < mapHeight; i++){
+  		for (int j = 0; j < mapWidth; j++){
+  			int x_d = abs(i - goal[0]);
+  			int y_d = abs(j - goal[1]);
+
+  			heuristic[i][j] = x_d + y_d;
+  		}
+  	}
+
+  	return heuristic;
+  }
 };
 
 // Planner class
