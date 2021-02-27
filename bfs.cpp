@@ -59,14 +59,18 @@ void search(Map map, Planner planner)
   bool no_way = false;
 
   // Create a closed 2 array filled with 0s and first element 1
-  vector<vector<int> > closed(map.mapHeight, vector<int>(map.mapWidth));
+  vector<vector<int>> closed(map.mapHeight, vector<int>(map.mapWidth));
   closed[planner.start[0]][planner.start[1]] = 1;
 
   // Store the expansions
-  vector<vector<int> > open;
+  vector<vector<int>> open;
   open.push_back({ g, x, y });
 
   int x_n, y_n;
+
+  // Create expand array
+  vector<vector<int>> expand(map.mapHeight, vector<int>(map.mapWidth, -1));
+  int count = 0;
 
   while (!found && !no_way){
     // Check if there is no way
@@ -89,10 +93,12 @@ void search(Map map, Planner planner)
       x = next[1];
       y = next[2];
 
+      // Fill the expand array
+      expand[x][y] = count++;
 
       if (x == planner.goal[0] && y == planner.goal[1]){
         found = true;
-        cout << "[" << g << ", " << x << ", " << y << "]" << endl;
+        cout << "Goal found: [" << g << ", " << x << ", " << y << "]" << endl;
       }
       else {
         for (int i = 0; i < planner.movements.size(); i++){
@@ -109,6 +115,9 @@ void search(Map map, Planner planner)
       }
     }
   }
+
+  cout << "Expansion Vector:" << endl; 
+  print2DVector(expand);
 }
 
 int main()
