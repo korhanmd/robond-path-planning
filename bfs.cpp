@@ -68,9 +68,12 @@ void search(Map map, Planner planner)
 
   int x_n, y_n;
 
-  // Create expand array
+  // Create expand vector
   vector<vector<int>> expand(map.mapHeight, vector<int>(map.mapWidth, -1));
   int count = 0;
+
+  // Create a vector for actions
+  vector<vector<int>> action(map.mapHeight, vector<int>(map.mapWidth, -1));
 
   while (!found && !no_way){
     // Check if there is no way
@@ -109,6 +112,7 @@ void search(Map map, Planner planner)
             if (closed[x_n][y_n] == 0 and map.grid[x_n][y_n] == 0) {
               open.push_back({g + planner.cost, x_n, y_n});
               closed[x_n][y_n] = 1;
+              action[x_n][y_n] = i;
             }
           }
         }
@@ -118,6 +122,26 @@ void search(Map map, Planner planner)
 
   cout << "Expansion Vector:" << endl; 
   print2DVector(expand);
+
+  if (found){
+    // Create a vector to save path
+    vector<vector<string> > policy(map.mapHeight, vector<string>(map.mapWidth, "-"));
+
+    x = planner.goal[0];
+    y = planner.goal[1];
+    policy[x][y] = '*';
+
+    while (x != planner.start[0] || y != planner.start[1]){
+      x_n = x - planner.movements[action[x][y]][0];
+      y_n = y - planner.movements[action[x][y]][1];
+      policy[x_n][y_n] = planner.movements_arrows[action[x][y]];
+      x = x_n;
+      y = y_n;
+    }
+
+    cout << "Path:" << endl;
+    print2DVector(policy);
+  }
 }
 
 int main()
