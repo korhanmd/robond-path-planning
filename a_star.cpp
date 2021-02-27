@@ -61,6 +61,7 @@ void search(Map map, Planner planner)
   int x = planner.start[0];
   int y = planner.start[1];
   int g = 0;
+  int f = g + map.heuristic[x][y];
 
   // Status flags
   bool found = false;
@@ -72,7 +73,7 @@ void search(Map map, Planner planner)
 
   // Store the expansions
   vector<vector<int>> open;
-  open.push_back({ g, x, y });
+  open.push_back({f, g, x, y});
 
   int x_n, y_n;
 
@@ -100,16 +101,17 @@ void search(Map map, Planner planner)
       next = open.back();
       open.pop_back();
 
-      g = next[0];
-      x = next[1];
-      y = next[2];
+      g = next[1];
+      x = next[2];
+      y = next[3];
+      f = g + map.heuristic[x][y];
 
       // Fill the expand array
       expand[x][y] = count++;
 
       if (x == planner.goal[0] && y == planner.goal[1]){
         found = true;
-        cout << "Goal found: [" << g << ", " << x << ", " << y << "]" << endl;
+        cout << "Goal found: [" << f << ", " << g << ", " << x << ", " << y << "]" << endl;
       }
       else {
         for (int i = 0; i < planner.movements.size(); i++){
@@ -118,7 +120,8 @@ void search(Map map, Planner planner)
 
           if (x_n >= 0 && x_n < map.mapHeight && y_n >= 0 && y_n < map.mapWidth){
             if (closed[x_n][y_n] == 0 and map.grid[x_n][y_n] == 0) {
-              open.push_back({g + planner.cost, x_n, y_n});
+              int g_n = g + planner.cost;
+              open.push_back({g_n + map.heuristic[x_n][y_n], g_n, x_n, y_n});
               closed[x_n][y_n] = 1;
               action[x_n][y_n] = i;
             }
