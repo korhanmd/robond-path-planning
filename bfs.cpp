@@ -6,7 +6,6 @@
 using namespace std;
 
 // Map class
-
 class Map{
 public:
   const static int mapWidth = 6;
@@ -21,7 +20,6 @@ public:
 };
 
 // Planner class
-
 class Planner : Map{
 public:
   int start[2] = {0, 0};
@@ -39,7 +37,6 @@ public:
 };
 
 // print2DVector function prints 2D vectors of any data type
-
 template <typename T>
 void print2DVector(T Vec){
   for (int i = 0; i < Vec.size(); i++){
@@ -50,22 +47,78 @@ void print2DVector(T Vec){
   }
 }
 
-/*############ Don't modify the main function############*/
+// search function generates the expansion list
+void search(Map map, Planner planner)
+{
+  int x = planner.start[0];
+  int y = planner.start[1];
+  int g = 0;
+
+  // Status flags
+  bool found = false;
+  bool no_way = false;
+
+  // Create a closed 2 array filled with 0s and first element 1
+  vector<vector<int> > closed(map.mapHeight, vector<int>(map.mapWidth));
+  closed[planner.start[0]][planner.start[1]] = 1;
+
+  // Store the expansions
+  vector<vector<int> > open;
+  open.push_back({ g, x, y });
+
+  int x_n, y_n;
+
+  while (!found && !no_way){
+    // Check if there is no way
+    if (open.size() == 0){
+      no_way = true;
+      cout << "Failed to reach a goal" << endl;
+    }
+    // If still there is a way to continue
+    else {
+      // Place next node at the end of the open list
+      sort(open.begin(), open.end());
+      reverse(open.begin(), open.end());
+
+      // Create a vector for next node
+      vector<int> next;
+      next = open.back();
+      open.pop_back();
+
+      g = next[0];
+      x = next[1];
+      y = next[2];
+
+
+      if (x == planner.goal[0] && y == planner.goal[1]){
+        found = true;
+        cout << "[" << g << ", " << x << ", " << y << "]" << endl;
+      }
+      else {
+        for (int i = 0; i < planner.movements.size(); i++){
+          x_n = x + planner.movements[i][0];
+          y_n = y + planner.movements[i][1];
+
+          if (x_n >= 0 && x_n < map.mapHeight && y_n >= 0 && y_n < map.mapWidth){
+            if (closed[x_n][y_n] == 0 and map.grid[x_n][y_n] == 0) {
+              open.push_back({g + planner.cost, x_n, y_n});
+              closed[x_n][y_n] = 1;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 int main()
 {
-    // Instantiate map and planner objects
-    Map map;
-    Planner planner;
+  // Instantiate map and planner objects
+  Map map;
+  Planner planner;
 
-    // Print classes variables
-    cout << "Map:" << endl;
-    print2DVector(map.grid);
-    cout << "Start: " << planner.start[0] << " , " << planner.start[1] << endl;
-    cout << "Goal: " << planner.goal[0] << " , " << planner.goal[1] << endl;
-    cout << "Cost: " << planner.cost << endl;
-    cout << "Robot Movements: " << planner.movements_arrows[0] << " , " << planner.movements_arrows[1] << " , " << planner.movements_arrows[2] << " , " << planner.movements_arrows[3] << endl;
-    cout << "Delta:" << endl;
-    print2DVector(planner.movements);
+  // Search for the expansions
+  search(map, planner);
 
-    return 0;
+  return 0;
 }
