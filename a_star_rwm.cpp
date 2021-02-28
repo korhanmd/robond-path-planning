@@ -225,9 +225,10 @@ void visualization(Map map, Planner planner)
         }
     }
 
-    // TODO: Plot start and end states in blue colors using o and * respectively
+    // Plot start and end states in blue colors using o and * respectively
+    plt::plot({(double)planner.start[0]}, {(double)planner.start[1]}, "bo");
+    plt::plot({(double)planner.goal[0]}, {(double)planner.goal[1]}, "b*");
 
-    
     // TODO: Plot the robot path in blue color using a .
 
     
