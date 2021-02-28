@@ -4,8 +4,10 @@
 #include <algorithm>
 #include <math.h>
 #include <fstream>
+#include "matplotlibcpp.h"
 
 using namespace std;
+namespace plt = matplotlibcpp;
 
 // Map class
 class Map{
@@ -200,6 +202,40 @@ Planner search(Map map, Planner planner)
   return planner;
 }
 
+void visualization(Map map, Planner planner)
+{
+    //Graph Format
+    plt::title("Path");
+    plt::xlim(0, map.mapHeight);
+    plt::ylim(0, map.mapWidth);
+
+    // Draw every grid of the map:
+    for (double x = 0; x < map.mapHeight; x++) {
+        cout << "Remaining Rows= " << map.mapHeight - x << endl;
+        for (double y = 0; y < map.mapWidth; y++) {
+            if (map.map[x][y] == 0) { //Green unkown state
+                plt::plot({ x }, { y }, "g.");
+            }
+            else if (map.map[x][y] > 0) { //Black occupied state
+                plt::plot({ x }, { y }, "k.");
+            }
+            else { //Red free state
+                plt::plot({ x }, { y }, "r.");
+            }
+        }
+    }
+
+    // TODO: Plot start and end states in blue colors using o and * respectively
+
+    
+    // TODO: Plot the robot path in blue color using a .
+
+    
+    //Save the image and close the plot
+    plt::save("./Images/Path.png");
+    plt::clf();
+}
+
 int main()
 {
   // Instantiate map and planner objects
@@ -208,6 +244,9 @@ int main()
 
   // Generate the shortest Path using the Astar algorithm
   planner = search(map, planner);
+
+  // Plot the Map and the path generated
+  visualization(map, planner);
 
   return 0;
 }
