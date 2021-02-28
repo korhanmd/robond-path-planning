@@ -185,7 +185,10 @@ Planner search(Map map, Planner planner)
     while (x != planner.start[0] || y != planner.start[1]){
       x_n = x - planner.movements[action[x][y]][0];
       y_n = y - planner.movements[action[x][y]][1];
+
+      planner.path.push_back({x_n, y_n});
       policy[x_n][y_n] = planner.movements_arrows[action[x][y]];
+      
       x = x_n;
       y = y_n;
     }
