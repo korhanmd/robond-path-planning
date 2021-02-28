@@ -69,8 +69,8 @@ private:
 // Planner class
 class Planner : Map{
 public:
-  int start[2] = {0, 0};
-  int goal[2] = {mapHeight - 1, mapWidth - 1};
+  int start[2] = {230, 145};
+  int goal[2] = {60, 50};
   int cost = 1;
 
   vector<vector<int>> movements = {
@@ -81,6 +81,7 @@ public:
   };
 
   string movements_arrows[4] = {"^", "<", "v", ">"};
+  vector<vector<int>> path;
 };
 
 // print2DVector function prints 2D vectors of any data type
