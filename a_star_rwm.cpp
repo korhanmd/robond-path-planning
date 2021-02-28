@@ -96,7 +96,7 @@ void print2DVector(T Vec){
 }
 
 // search function generates the expansion list
-void search(Map map, Planner planner)
+Planner search(Map map, Planner planner)
 {
   int x = planner.start[0];
   int y = planner.start[1];
@@ -193,6 +193,8 @@ void search(Map map, Planner planner)
     cout << "Path:" << endl;
     print2DVector(policy);
   }
+
+  return planner;
 }
 
 int main()
@@ -201,8 +203,8 @@ int main()
   Map map;
   Planner planner;
 
-  // Search for the expansions
-  search(map, planner);
+  // Generate the shortest Path using the Astar algorithm
+  planner = search(map, planner);
 
   return 0;
 }
